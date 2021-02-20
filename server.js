@@ -127,8 +127,8 @@ client.on("message", msg => {
       if(String(kullanici) == 'undefined'){ msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
       kullanici.roles.cache.forEach(rol => { roller.push(rol.name); });
 
-      let rol, i;
-      for (i = 1; i < roller.length; i++) {
+      let rol;
+      for (let i = 1; i < roller.length + 1; i++) {
         let r = roller[roller.length - i];
         if (r.includes('«')) { rol = r; break; }
       }
