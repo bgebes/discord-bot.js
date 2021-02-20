@@ -124,6 +124,7 @@ client.on("message", msg => {
       isim = isim.trim();
 
       let roller = [], kullanici = msg.guild.members.cache.get(kullanici_id);
+      if(String(kullanici) == 'undefined'){ msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
       kullanici.roles.cache.forEach(rol => { roller.push(rol.name); });
 
       let rol, i;
@@ -143,9 +144,10 @@ client.on("message", msg => {
       msg.delete({ timeout: 1000, reason: 'It had to be done.' });
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
-      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 2) { return; }
+      if(!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 2) { return; }
       let parcalar = msg.content.split(' ');
       let kullanici_id = parcalar[1].slice(3, -1), kullanici = msg.guild.members.cache.get(kullanici_id);
+      if(String(kullanici) == 'undefined'){ msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
       let kisi = kullanici.user.tag, parcalar3 = kisi.split("#"), kisiismi = parcalar3[0];
 
       kullanici.roles.set([]); kullanici.setNickname(kisiismi);
