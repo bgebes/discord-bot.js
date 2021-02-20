@@ -250,8 +250,8 @@ client.on("message", msg => {
         roller.push(rol.name);
       });
 
-      let rol;
-      for (let i = 1; i < roller.length; i++) {
+      let rol, i;
+      for (i = 1; i < roller.length; i++) {
         let r = roller[roller.length - i];
         if (r.includes('«')) {
           rol = r;
@@ -264,12 +264,8 @@ client.on("message", msg => {
         kullanici.roles.add(kullanici.guild.roles.cache.find(r => r.name == rol));
       }
 
-      let parcalar2 = rol.split(' ');
-      let simge = parcalar2[0];
-      let aralik = parcalar2[1];
-
-      let yeni = `${simge} ${aralik} ${isim}`;
-      let yas_eki = `『${yas}』`;
+      let parcalar2 = rol.split(' '), simge = parcalar2[0], aralik = parcalar2[1];
+      let yeni = `${simge} ${aralik} ${isim}`, yas_eki = `『${yas}』`;
       if (yas != 'NaN') { yeni += yas_eki; }
 
       kullanici.setNickname(yeni);
@@ -278,25 +274,16 @@ client.on("message", msg => {
       msg.delete({ timeout: 1000, reason: 'It had to be done.' });
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
-      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu')) {
-        return;
-      }
+      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu')) { return; }
 
       let parcalar = msg.content.split(' ');
-      let kullanici_id = parcalar[1].slice(3, -1); //=> <@!809423307644469269> 
-      let kullanici = msg.guild.members.cache.get(kullanici_id);
+      let kullanici_id = parcalar[1].slice(3, -1), kullanici = msg.guild.members.cache.get(kullanici_id);
+      let kisi = kullanici.user.tag, parcalar3 = kisi.split("#"), kisiismi = parcalar3[0];
 
-      let kisi = kullanici.user.tag;
-      let parcalar3 = kisi.split("#");
-      let kisiismi = parcalar3[0];
-
-      kullanici.roles.set([]);
-      kullanici.setNickname(kisiismi);
-
+      kullanici.roles.set([]); kullanici.setNickname(kisiismi);
     }
 
   }
-
 });
 
 client.login(token);
