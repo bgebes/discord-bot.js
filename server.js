@@ -229,12 +229,9 @@ client.on("message", msg => {
       msg.delete({ timeout: 1000, reason: 'It had to be done.' });
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
-      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu')) {
-        return;
-      }
+      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu')) { return; }
 
-      let parcalar = msg.content.split(' ');
-      let kullanici_id = parcalar[1].slice(3, -1); //=> <@!809423307644469269> 
+      let parcalar = msg.content.split(' '), kullanici_id = parcalar[1].slice(3, -1); //=> <@!809423307644469269> 
       let isim = '', yas = String(parseInt(parcalar[parcalar.length - 1]));
       let sayim = yas == 'NaN' ? parcalar.length : parcalar.length - 1;
 
@@ -244,8 +241,7 @@ client.on("message", msg => {
 
       isim = isim.trim();
 
-      let roller = [];
-      let kullanici = msg.guild.members.cache.get(kullanici_id);
+      let roller = [], kullanici = msg.guild.members.cache.get(kullanici_id);
       kullanici.roles.cache.forEach(rol => {
         roller.push(rol.name);
       });
