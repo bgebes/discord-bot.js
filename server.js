@@ -69,22 +69,18 @@ client.on("message", msg => {
 
   if (msg.guild.name === 'Team Türkman') {
     let rol = msg.guild.roles.cache.find(role => role.name === "🧍 | Takipçi"), ilkbas = rndcek(0, 255);
-    let ikincibas = rndcek(0, 255), ucuncubas = rndcek(0, 255);
-    let renk = rgbHex(ilkbas, ikincibas, ucuncubas); rol.setColor("#" + renk);
+    let ikincibas = rndcek(0, 255), ucuncubas = rndcek(0, 255), renk = rgbHex(ilkbas, ikincibas, ucuncubas); rol.setColor("#" + renk);
 
-    if (msg.content.includes("discord.gg") && !msg.author.id === "263395757753761794") {
-      msg.delete({ timeout: 1000, reason: 'It had to be done.' }); return;
-    }
+    if (msg.content.includes("discord.gg") && !msg.author.id === "263395757753761794") { msg.delete(); return; } //{ timeout: 1000, reason: 'It had to be done.' }
 
     if (msg.content.startsWith(prefix + "ozelodakur") && msg.channel.name === "📞│𝙾da-𝙰cma-𝙺analı") {
-      //
       let parcalar1 = msg.content.split(" "), bilgiparcasi = parcalar1[1], parcalar2 = bilgiparcasi.split(",");
       if (parcalar1.length == 2 && parcalar2.length == 2) {
         let kanalismi = parcalar2[0], kisisayisi = parcalar2[1];
         msg.guild.createChannel(kanalismi, "voice").then(c => { c.userLimit = kisisayisi; c.setParent("693548336753541120"); });
       } 
       else { msg.reply("Hatalı biçimde giriş yaptınız!").then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); }
-      msg.delete({ timeout: 1000, reason: 'It had to be done.' });
+      msg.delete(); //{ timeout: 1000, reason: 'It had to be done.' }
     }
     
     if (msg.content === prefix + "cleanup" && msg.author.id === "263395757753761794") {
@@ -103,7 +99,7 @@ client.on("message", msg => {
     }
 
     if (msg.content === prefix + "cleanup") {
-      try { msg.delete({ timeout: 1000, reason: 'It had to be done.' }); } catch{ }
+      try { msg.delete(); } catch{ } //{ timeout: 1000, reason: 'It had to be done.' }
     }
     if (msg.content == prefix + "clear" && msg.author.id === "263395757753761794") {
       async function clear() { msg.delete(); const fetched = await msg.channel.fetchMessages({ limit: 99 }); msg.channel.bulkDelete(fetched); }
@@ -112,36 +108,31 @@ client.on("message", msg => {
   }
   else {
     if (msg.content.startsWith(prefix + 'isim')) {
-      msg.delete({ timeout: 1000, reason: 'It had to be done.' });
+      msg.delete(); //{ timeout: 2000, reason: 'It had to be done.' }
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
       if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 3) { return; }
       let parcalar = msg.content.trim().split(' '), kullanici_id = parcalar[1].slice(3, -1); //=> <@!809423307644469269> 
-      let isim = '', yas = String(parseInt(parcalar[parcalar.length - 1]));
+      let isim_parcalar = [], yas = String(parseInt(parcalar[parcalar.length - 1]));
       let sayim = yas == 'NaN' ? parcalar.length : parcalar.length - 1;
 
-      for (let i = 2; i < sayim; i++) { if(parcalar[i].length < 2) {continue;} isim += parcalar[i].trim().toLocaleLowerCase().replace(parcalar[i][0], parcalar[i][0].toLocaleUpperCase()) + ' '; }
-      isim = isim.trim();
+      for (let i = 2; i < sayim; i++) { if(parcalar[i].length < 2) {continue;} isim_parcalar.push(parcalar[i].toLocaleLowerCase()); }
+      let isim = isim_parcalar.map(parca => parca.replace(parca[0], parca[0].toLocaleUpperCase())).join(' ');
 
       let roller = [], kullanici = msg.guild.members.cache.get(kullanici_id);
       if(String(kullanici) == 'undefined'){ msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
       kullanici.roles.cache.forEach(rol => { roller.push(rol.name); });
 
       let rol;
-      for (let i = 1; i < roller.length + 1; i++) {
-        let r = roller[roller.length - i];
-        if (r.includes('«')) { rol = r; break; }
-      }
-
+      for (let i = 1; i < roller.length + 1; i++) { let r = roller[roller.length - i]; if (r.includes('«')) { rol = r; break; } }
       if (rol == undefined) { rol = '∑ « Muffin'; kullanici.roles.add(kullanici.guild.roles.cache.find(r => r.name == rol)); }
-      let parcalar2 = rol.split(' '), simge = parcalar2[0], aralik = parcalar2[1];
-      let yeni = `${simge} ${aralik} ${isim}`, yas_eki = `『${yas}』`;
+      let parcalar2 = rol.split(' '), simge = parcalar2[0], aralik = parcalar2[1], yeni = `${simge} ${aralik} ${isim}`, yas_eki = `『${yas}』`;
       if (yas != 'NaN') { yeni += yas_eki; }
 
       kullanici.setNickname(yeni);
     }
     if(msg.content.startsWith(prefix + 'sıfırla') || msg.content.startsWith(prefix + 'sifirla')){
-      msg.delete({ timeout: 1000, reason: 'It had to be done.' });
+      msg.delete(); //{ timeout: 2000, reason: 'It had to be done.' }
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
       if(!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 2) { return; }
