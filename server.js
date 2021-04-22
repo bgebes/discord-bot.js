@@ -10,13 +10,13 @@ client.on("ready", () => {
 
 client.on("guildMemberAdd", guildMember => {
   if (guildMember.guild.name === 'Team Türkman') {
-    guildMember.roles.add(guildMember.guild.roles.find(role => role.name === "🧍 | Takipçi"));
+    guildMember.roles.add(guildMember.guild.roles.cache.find(role => role.name === "🧍 | Takipçi"));
 
     let oyuncu = `<@${guildMember.id}>`, mevcutkisi = guildMember.guild.members.cache.filter(member => !member.user.bot).size;
     let kanal = guildMember.guild.channels.cache.get("700727786297622548"), kalankisi = hedef - mevcutkisi, resim = guildMember.user.avatarURL;
     if (resim === null) { resim = "https://i.hizliresim.com/3xhvx7.png"; }
     let metin = mevcutkisi < hedef ? `${hedef} kişi hedefimize ${kalankisi} kişi kaldı!!` : `${hedef} kişi hedefimize ulaşmış durumdayız!!`;
-    let rola = client.guilds.cache.get("693515017127067688").roles.find(role => role.name === "🤖 | BOT");
+    let rola = client.guilds.cache.get("693515017127067688").roles.cache.find(role => role.name === "🤖 | BOT");
     const embed = {
       title: "Çekilin Yoldan Bir Bela Geliyor!!",
       description: oyuncu + " adlı oyuncu sunucumuza **hoşgeldin!**",
@@ -30,21 +30,29 @@ client.on("guildMemberAdd", guildMember => {
       }
     };
 
-    setTimeout(function () { kanal.send({ embed }).then(msg => { msg.react("✅"); msg.react("🥳"); msg.react("😷");
+    setTimeout(function () {
+      kanal.send({ embed }).then(msg => {
+        msg.react("✅"); msg.react("🥳"); msg.react("😷");
         msg.react("🎉"); msg.react("700834747034763274");
-      }); }, 1000);
+      });
+    }, 1000);
+  } else if (guildMember.guild.name === 'ARMOYU Topluluk Grubu') {
+    guildMember.roles.add(guildMember.guild.roles.cache.find(role => role.name === "Üye"));
+
+    let tag = '∮ «', firstUserName = guildMember.user.username;
+    guildMember.setNickname(`${tag} ${firstUserName}`);
   }
 });
 
 client.on("guildMemberRemove", function (guildMember) {
   if (guildMember.guild.name === 'Team Türkman') {
-    guildMember.roles.add(guildMember.guild.roles.find(role => role.name === "🧍 | Takipçi"));
+    guildMember.roles.add(guildMember.guild.roles.cache.find(role => role.name === "🧍 | Takipçi"));
 
     let oyuncu = `<@${guildMember.id}>`, mevcutkisi = guildMember.guild.members.cache.filter(member => !member.user.bot).size;
     let kanal = guildMember.guild.channels.cache.get("700727786297622548"), kalankisi = hedef - mevcutkisi, resim = guildMember.user.avatarURL;
     if (resim === null) { resim = "https://i.hizliresim.com/3xhvx7.png"; }
     let metin = mevcutkisi < hedef ? `${hedef} kişi hedefimize ${kalankisi} kişi kaldı!!` : `${hedef} kişi hedefimize ulaşmış durumdayız!!`;
-    let rola = client.guilds.cache.get("693515017127067688").roles.find(role => role.name === "🤖 | BOT");
+    let rola = client.guilds.cache.get("693515017127067688").roles.cache.find(role => role.name === "🤖 | BOT");
     const embed = {
       title: "Rahmetliyi Nasıl Bilirdiniz??",
       description: oyuncu + " adlı oyuncu **görüşmek üzere!!**",
@@ -78,28 +86,30 @@ client.on("message", msg => {
       if (parcalar1.length == 2 && parcalar2.length == 2) {
         let kanalismi = parcalar2[0], kisisayisi = parcalar2[1];
         msg.guild.createChannel(kanalismi, "voice").then(c => { c.userLimit = kisisayisi; c.setParent("693548336753541120"); });
-      } 
+      }
       else { msg.reply("Hatalı biçimde giriş yaptınız!").then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); }
       msg.delete(); //{ timeout: 1000, reason: 'It had to be done.' }
     }
-    
+
     if (msg.content === prefix + "cleanup" && msg.author.id === "263395757753761794") {
       let category = client.guilds.cache.get("693515017127067688").channels.cache.get("693548336753541120");
-      category.children.cache.filter(c => c.type == "voice").forEach(vcChannel =>vcChannel.members.map(member =>vcChannel.setParent("693553401090539531")));
+      category.children.cache.filter(c => c.type == "voice").forEach(vcChannel => vcChannel.members.map(member => vcChannel.setParent("693553401090539531")));
 
       setTimeout(function () {
         let kanallar = client.guilds.cache.get("693515017127067688").channels.cache.filter(c => c.type == "voice" && c.parentID == "693548336753541120");
         let kanal = kanallar.map(e => e), i;
-        for (i = 0; i < kanal.length; i++) { kanal[i].delete(); } }, 2000);
+        for (i = 0; i < kanal.length; i++) { kanal[i].delete(); }
+      }, 2000);
 
       setTimeout(function () {
         let kanallar = client.guilds.cache.get("693515017127067688").channels.cache.filter(c => c.type == "voice" && c.parentID == "693553401090539531");
         let kanal = kanallar.map(e => e), i = 0;
-        for (i = 0; i < kanal.length; i++) { kanal[i].setParent("693548336753541120"); } }, 3000);
+        for (i = 0; i < kanal.length; i++) { kanal[i].setParent("693548336753541120"); }
+      }, 3000);
     }
 
     if (msg.content === prefix + "cleanup") {
-      try { msg.delete(); } catch{ } //{ timeout: 1000, reason: 'It had to be done.' }
+      try { msg.delete(); } catch { } //{ timeout: 1000, reason: 'It had to be done.' }
     }
     if (msg.content == prefix + "clear" && msg.author.id === "263395757753761794") {
       async function clear() { msg.delete(); const fetched = await msg.channel.fetchMessages({ limit: 99 }); msg.channel.bulkDelete(fetched); }
@@ -116,11 +126,11 @@ client.on("message", msg => {
       let isim_parcalar = [], yas = String(parseInt(parcalar[parcalar.length - 1]));
       let sayim = yas == 'NaN' ? parcalar.length : parcalar.length - 1;
 
-      for (let i = 2; i < sayim; i++) { if(parcalar[i].length < 2) {continue;} isim_parcalar.push(parcalar[i].toLocaleLowerCase()); }
+      for (let i = 2; i < sayim; i++) { if (parcalar[i].length < 2) { continue; } isim_parcalar.push(parcalar[i].toLocaleLowerCase()); }
       let isim = isim_parcalar.map(parca => parca.replace(parca[0], parca[0].toLocaleUpperCase())).join(' ');
 
       let roller = [], kullanici = msg.guild.members.cache.get(kullanici_id);
-      if(String(kullanici) == 'undefined'){ msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
+      if (String(kullanici) == 'undefined') { msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
       kullanici.roles.cache.forEach(rol => { roller.push(rol.name); });
 
       let rol;
@@ -131,14 +141,14 @@ client.on("message", msg => {
 
       kullanici.setNickname(yeni);
     }
-    if(msg.content.startsWith(prefix + 'sıfırla') || msg.content.startsWith(prefix + 'sifirla')){
+    if (msg.content.startsWith(prefix + 'sıfırla') || msg.content.startsWith(prefix + 'sifirla')) {
       msg.delete(); //{ timeout: 2000, reason: 'It had to be done.' }
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
-      if(!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 2) { return; }
+      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 2) { return; }
       let parcalar = msg.content.trim().split(' ');
       let kullanici_id = parcalar[1].slice(3, -1), kullanici = msg.guild.members.cache.get(kullanici_id);
-      if(String(kullanici) == 'undefined'){ msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
+      if (String(kullanici) == 'undefined') { msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
       let kisi = kullanici.user.tag, parcalar3 = kisi.split("#"), kisiismi = parcalar3[0];
 
       kullanici.roles.set([]); kullanici.setNickname(kisiismi);
