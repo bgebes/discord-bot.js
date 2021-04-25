@@ -1,5 +1,5 @@
 const Discord = require("discord.js"), rgbHex = require("rgb-hex"), client = new Discord.Client();
-const { prefix, token, durum, hedef } = require('./config.json'), wait = require('util').promisify(setTimeout);
+const { prefix, token, durum, hedef } = require('./_config.json'), wait = require('util').promisify(setTimeout);
 
 client.on("ready", () => {
   wait(1000);
