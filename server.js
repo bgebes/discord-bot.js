@@ -1,5 +1,5 @@
 const Discord = require("discord.js"), rgbHex = require("rgb-hex"), client = new Discord.Client();
-const { prefix, durum, hedef } = require('./_config.json'), wait = require('util').promisify(setTimeout);
+const { prefix, durum, hedef } = require('./config.json'), wait = require('util').promisify(setTimeout);
 const token;
 
 client.on("ready", () => {
@@ -122,31 +122,45 @@ client.on("message", msg => {
       msg.delete(); //{ timeout: 2000, reason: 'It had to be done.' }
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
-      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 3) { return; }
+      if (!gonderen_rolleri.some(r => r.name == 'Alım Sorumlusu') || msg.content.split(' ').length < 3) { return; }
       let parcalar = msg.content.trim().split(' '), kullanici_id = parcalar[1].slice(3, -1); //=> <@!809423307644469269> 
+      let kullanici = msg.guild.members.cache.get(kullanici_id); 
       let isim_parcalar = [], yas = String(parseInt(parcalar[parcalar.length - 1]));
       let sayim = yas == 'NaN' ? parcalar.length : parcalar.length - 1;
 
       for (let i = 2; i < sayim; i++) { if (parcalar[i].length < 2) { continue; } isim_parcalar.push(parcalar[i].toLocaleLowerCase()); }
       let isim = isim_parcalar.map(parca => parca.replace(parca[0], parca[0].toLocaleUpperCase())).join(' ');
 
-      let roller = [], kullanici = msg.guild.members.cache.get(kullanici_id);
-      if (String(kullanici) == 'undefined') { msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
-      kullanici.roles.cache.forEach(rol => { roller.push(rol.name); });
-
-      let rol;
-      for (let i = 1; i < roller.length + 1; i++) { let r = roller[roller.length - i]; if (r.includes('«')) { rol = r; break; } }
-      if (rol == undefined) { rol = '∑ « Muffin'; kullanici.roles.add(kullanici.guild.roles.cache.find(r => r.name == rol)); }
-      let parcalar2 = rol.split(' '), simge = parcalar2[0], aralik = parcalar2[1], yeni = `${simge} ${aralik} ${isim}`, yas_eki = `『${yas}』`;
+      let parcalar2 = '∮ «'.split(' '), simge = parcalar2[0], aralik = parcalar2[1], yeni = `${simge} ${aralik} ${isim}`, yas_eki = `『${yas}』`;
       if (yas != 'NaN') { yeni += yas_eki; }
 
       kullanici.setNickname(yeni);
     }
+
+    if(msg.content.startsWith(prefix + 'kaydol')){ // !kaydol isim yas
+      msg.delete(); //{ timeout: 2000, reason: 'It had to be done.' }
+
+      if (msg.content.split(' ').length < 3) { return; }
+
+      let parcalar = msg.content.trim().split(' '), kullanici_id = msg.author.id; //=> <@!809423307644469269> 
+      let kullanici = msg.guild.members.cache.get(kullanici_id);  
+      let isim_parcalar = [], yas = String(parseInt(parcalar[parcalar.length - 1]));
+      let sayim = yas == 'NaN' ? parcalar.length : parcalar.length - 1;
+
+      for (let i = 1; i < sayim; i++) { if (parcalar[i].length < 2) { continue; } isim_parcalar.push(parcalar[i].toLocaleLowerCase()); }
+      let isim = isim_parcalar.map(parca => parca.replace(parca[0], parca[0].toLocaleUpperCase())).join(' ');
+
+      let parcalar2 = '∮ «'.split(' '), simge = parcalar2[0], aralik = parcalar2[1], yeni = `${simge} ${aralik} ${isim}`, yas_eki = `『${yas}』`;
+      if (yas != 'NaN') { yeni += yas_eki; }
+
+      kullanici.setNickname(yeni);
+    }
+
     if (msg.content.startsWith(prefix + 'sıfırla') || msg.content.startsWith(prefix + 'sifirla')) {
       msg.delete(); //{ timeout: 2000, reason: 'It had to be done.' }
 
       let gonderen_rolleri = msg.guild.members.cache.get(msg.author.id).roles.cache;
-      if (!gonderen_rolleri.some(r => r.name == '💂╏Kayıt Sorumlusu') || msg.content.split(' ').length < 2) { return; }
+      if (!gonderen_rolleri.some(r => r.name == 'Alım Sorumlusu') || msg.content.split(' ').length < 2) { return; }
       let parcalar = msg.content.trim().split(' ');
       let kullanici_id = parcalar[1].slice(3, -1), kullanici = msg.guild.members.cache.get(kullanici_id);
       if (String(kullanici) == 'undefined') { msg.reply('Kişi bulunamadı!').then(m => { m.delete({ timeout: 5000, reason: 'It had to be done.' }); }); return; }
